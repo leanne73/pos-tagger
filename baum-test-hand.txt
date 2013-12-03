@@ -65,7 +65,8 @@ that C
 he N
 was V
 obliged AJ
-to build V
+to V
+build V
 another N
 ; S
 and C
@@ -77,13 +78,16 @@ poor AJ
 man N
 he N
 had V
-to mortgage V
+to V
+mortgage V
 his AJ
 farm N
-to get V
+to V
+get V
 the AJ
 money N
-to pay V
+to V
+pay V
 for P
 the AJ
 new AJ
@@ -99,13 +103,15 @@ he N
 was V
 too AV
 feeble AJ
-to work V
+to V
+work V
 . E
 The AJ
 doctor N
 ordered V
 him N
-to take V
+to V
+take V
 a AJ
 sea AJ
 voyage N
