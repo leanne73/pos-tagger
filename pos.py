@@ -135,11 +135,9 @@ def main(verbose=False):
     #   did tg1 emit v?"
     #emit_probs = {y: {x: 0 for x in vocab} for y in reduced_tags}
     emit_probs = {y: defaultdict(lambda: K / (totals[y] + K * len(word_tag_tally[y].values()))) for y in reduced_tags}
-    print vocab
     for tg in reduced_tags:
         for wd in vocab:
             emit_probs[tg][wd] = word_tag_tally[tg][wd] / totals[tg]
-            print "P(%s|%s) => %f(%d)"%(wd, tg, emit_probs[tg][wd], word_tag_tally[tg][wd])
     
     if verbose: print emit_probs
 
@@ -159,7 +157,6 @@ def pos_tagging(sequence, trans_probs, emit_probs, tags, start):
     V = [{}]
     P = {}
     for tag in tags:
-        print tag
         V[0][tag] = A[start][tag] * B[tag][O[0]]
         P[tag] = [tag]
     for t in range(1, len(O)):
