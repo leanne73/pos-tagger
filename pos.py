@@ -10,7 +10,7 @@ import nltk
 from nltk.corpus import PlaintextCorpusReader
 from nltk import FreqDist
 
-def nltk_to_normalized_tag(ntlk_tag):
+def nltk_to_normalized_tag(nltk_tag):
 	penntb_to_reduced = {}
 	# noun-like
 	for x in ['NN', 'NNS', 'NNP', 'NNPS', 'PRP', 'EX', 'WP']:
