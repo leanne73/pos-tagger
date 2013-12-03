@@ -10,26 +10,7 @@ import nltk
 from nltk.corpus import PlaintextCorpusReader
 from nltk import FreqDist
 
-def main(verbose=False):
-	# 1. Load a (training) corpus.
-	# In the code below, the corpus will be
-	# referred to by variable all_text
-	reader = PlaintextCorpusReader('.', '.*\.txt')
-	all_text = nltk.Text(reader.words('baum-train-quarter.txt'))
-	
-	
-	# make the training text lowercase
-	all_text_lower = [x.lower() for x in all_text]
-	freq_dist = FreqDist(all_text_lower)
-	
-	# make a reduced vocabulary (here, 500 types)
-	vocab = freq_dist.keys()[:500]
-	vocab.append('***')
-	
-	
-	
-	
-	# 2. Make a reduced form of the PennTB tagset
+def nltk_to_normalized_tag(ntlk_tag):
 	penntb_to_reduced = {}
 	# noun-like
 	for x in ['NN', 'NNS', 'NNP', 'NNPS', 'PRP', 'EX', 'WP']:
@@ -61,6 +42,25 @@ def main(verbose=False):
 	# end-of-sentence symbols
 	for x in ['.', '!', '?']:
 	    penntb_to_reduced[x] = 'E'
+	return penntb_to_reduced[nltk_tag]
+
+def main(verbose=False):
+	# 1. Load a (training) corpus.
+	# In the code below, the corpus will be
+	# referred to by variable all_text
+	reader = PlaintextCorpusReader('.', '.*\.txt')
+	all_text = nltk.Text(reader.words('baum-train-quarter.txt'))
+	
+	
+	# make the training text lowercase
+	all_text_lower = [x.lower() for x in all_text]
+	freq_dist = FreqDist(all_text_lower)
+	
+	# make a reduced vocabulary (here, 500 types)
+	vocab = freq_dist.keys()[:500]
+	vocab.append('***')
+
+	# 2. Make a reduced form of the PennTB tagset
 	
 	reduced_tags = ['N', 'V', 'AJ', 'AV', 'I', 'S', 'G', 'E', 'P', 'C']
 	
@@ -98,7 +98,7 @@ def main(verbose=False):
 	        else:
 	            tag = 'G'
 	    else:
-	        tag = penntb_to_reduced[tag]
+	        tag = nltk_to_normalized_tag(tag)
 	
 	    if(word in vocab):  
 	        word_tag_tally[word][tag] += 1
