@@ -144,9 +144,7 @@ def main(verbose=False):
     if verbose: print emit_probs
 
     # 6. try it out: run the algorithm on the test data
-    test_sample = "Dorothy lived on a farm .".split()
-    return [test_sample, trans_probs, emit_probs, vocab, reduced_tags, 'E']
-    #test_tagged = pos_tagging(test_sample, trans_probs, emit_probs, vocab, reduced_tags, 'E')            
+    return [trans_probs, emit_probs, reduced_tags, 'E']
 
 
 # 5. implement Viterbi. 
@@ -154,7 +152,7 @@ def main(verbose=False):
 # a matrix of transition probs, a matrix of emit probs,
 # a vocabulary, a set of tags, and the starting tag
 
-def pos_tagging(sequence, trans_probs, emit_probs, vocab, tags, start) :
+def pos_tagging(sequence, trans_probs, emit_probs, tags, start):
     O = sequence
     A = trans_probs
     B = emit_probs
