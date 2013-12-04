@@ -47,12 +47,12 @@ def nltk_to_normalized_tag(nltk_tag):
         penntb_to_reduced[x] = 'E'
     return penntb_to_reduced[nltk_tag]
 
-def main(verbose=False):
+def main(verbose=False, corpus='baum-train-quarter.txt'):
     # 1. Load a (training) corpus.
     # In the code below, the corpus will be
     # referred to by variable all_text
     reader = PlaintextCorpusReader('.', '.*\.txt')
-    all_text = nltk.Text(reader.words('baum-train-quarter.txt'))
+    all_text = nltk.Text(reader.words(corpus))
 
 
     # make the training text lowercase
