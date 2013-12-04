@@ -12,11 +12,12 @@ with open('baum-test-hand.txt') as hand:
 trans_probs, emit_probs, tags, start = pos.main()
 with open('baum-tiny-test.txt') as corpus:
 	words = " ".join(corpus)
-	generated_tags = pos.pos_tagging(words, trans_probs, emit_probs, tags, start)
+	print words.strip()
+	generated_tags = pos.pos_tagging(words.strip().split(), trans_probs, emit_probs, tags, start)
 
-#crank NLTK magic here
 reader = PlaintextCorpusReader('.', '.*\.txt')
-test_text = nltk.Text(reader.words('baum-tiny-test.txt'))
+with open('baum-tiny-test.txt') as baum:
+	test_text = nltk.Text(" ".join(baum).strip().split())
 
 nltk_tags = nltk.pos_tag(test_text)
 nltk_tags = [pos.nltk_to_normalized_tag(tag) for (word, tag) in nltk_tags]
