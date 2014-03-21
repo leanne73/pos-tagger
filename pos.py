@@ -48,41 +48,26 @@ def nltk_to_normalized_tag(nltk_tag):
     return penntb_to_reduced[nltk_tag]
 
 def main(verbose=False, corpus='baum-train-quarter.txt'):
-    # 1. Load a (training) corpus.
-    # In the code below, the corpus will be
-    # referred to by variable all_text
     reader = PlaintextCorpusReader('.', '.*\.txt')
     all_text = nltk.Text(reader.words(corpus))
 
 
-    # make the training text lowercase
     all_text_lower = [x.lower() for x in all_text]
     freq_dist = FreqDist(all_text_lower)
     
-    # make a reduced vocabulary (here, 500 types)
     vocab = freq_dist.keys()#[:500]
     vocab.append('***')
 
-    # 2. Make a reduced form of the PennTB tagset
 
     reduced_tags = ['N', 'V', 'AJ', 'AV', 'G', 'E', 'P', 'C']
     
-    # 3. tag the corpus
     all_tagged = nltk.pos_tag(all_text)
     
-    # 4. make the probability matrices
-    
-    # a tally from types to tags; a tally from tags to next tags
-    # LaPlace smoothing---add 1 to each
-    
-    # emission probs
     word_tag_tally = {y: {x: 1 for x in vocab} for y in reduced_tags}
     
-    #transition probs
     tag_trans_tally = {y: {x: 1 for x in reduced_tags} for y in reduced_tags}
     
     
-    #keeps track of the total individual occurences of each tag
     totals = {}
     for key in reduced_tags:
         totals[key] = 1
@@ -111,16 +96,6 @@ def main(verbose=False, corpus='baum-train-quarter.txt'):
     
         previous_tag = tag
     
-    # fill this out:
-    #   For each tag tg1 compute the probabilities for transitioning to
-    #   each tag (say, tg2). Using relative frequency estimation,
-    #   that would mean dividing the number of times tg2 follows tg1 by
-    #   the absolute number of times t1 occurs. (But, what if tg1 never occurs..?)
-    #   Recommendation: think in terms of "for each tg2, how many times had
-    #   we transitioned from tg1?"
-    
-    # now, make the actual transition probability matrices 
-    #trans_probs = {y: {x: 0 for x in reduced_tags} for y in reduced_tags}
     K = 1
     trans_probs = {y: defaultdict(lambda: K / (totals[y] + K * len(word_tag_tally[y].values()))) for y in reduced_tags}
     for tg1 in reduced_tags:
@@ -129,11 +104,6 @@ def main(verbose=False, corpus='baum-train-quarter.txt'):
     
     if verbose: print trans_probs 
     
-    # Fill this out:
-    #   For each tag tg1 compute the probabilities for emitting each word v.
-    #   Recommendation: think in terms of "for each word v, how many times
-    #   did tg1 emit v?"
-    #emit_probs = {y: {x: 0 for x in vocab} for y in reduced_tags}
     emit_probs = {y: defaultdict(lambda: K / (totals[y] + K * len(word_tag_tally[y].values()))) for y in reduced_tags}
     for tg in reduced_tags:
         for wd in vocab:
@@ -141,14 +111,8 @@ def main(verbose=False, corpus='baum-train-quarter.txt'):
     
     if verbose: print emit_probs
 
-    # 6. try it out: run the algorithm on the test data
     return [trans_probs, emit_probs, reduced_tags, 'E']
 
-
-# 5. implement Viterbi. 
-# Write a function that takes a sequence of tokens,
-# a matrix of transition probs, a matrix of emit probs,
-# a vocabulary, a set of tags, and the starting tag
 
 def pos_tagging(sequence, trans_probs, emit_probs, tags, start):
     O = sequence
